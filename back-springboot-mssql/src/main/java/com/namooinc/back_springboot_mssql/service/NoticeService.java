@@ -15,8 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 import com.namooinc.back_springboot_mssql.dto.NoticeDTO.NoticeRequestDTO;
 import com.namooinc.back_springboot_mssql.dto.NoticeDTO.NoticeResponseDTO;
 import com.namooinc.back_springboot_mssql.model.Notice;
-import com.namooinc.back_springboot_mssql.model.NoticeFile;
-import com.namooinc.back_springboot_mssql.repository.NoticeFileRepository;
 import com.namooinc.back_springboot_mssql.repository.NoticeRepository;
 
 @Service
@@ -26,7 +24,7 @@ public class NoticeService {
     private NoticeRepository noticeRepository;
 
     @Autowired
-    private NoticeFileRepository noticeFileRepository;
+    private NoticeFileService noticeFileService;
 
     public NoticeRequestDTO save(NoticeRequestDTO requestDTO, MultipartFile[] files) {
         Notice notice = Notice.builder().title(requestDTO.getTitle()).content(requestDTO.getContent())
@@ -35,16 +33,7 @@ public class NoticeService {
         Notice savedNotice = noticeRepository.save(notice);
 
         if (files != null && files.length > 0) {
-            for (MultipartFile file : files) {
-                NoticeFile noticeFile = NoticeFile.builder()
-                        .originalName(file.getOriginalFilename())
-                        .notice(savedNotice)
-                        .saveName(file.getOriginalFilename())
-                        .size(file.getSize())
-                        .build();
-
-                noticeFileRepository.save(noticeFile);
-            }
+            noticeFileService.uploadFile(savedNotice, files);
         }
 
         return NoticeRequestDTO.builder()

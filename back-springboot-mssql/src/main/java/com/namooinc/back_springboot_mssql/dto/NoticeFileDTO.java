@@ -29,6 +29,8 @@ public class NoticeFileDTO {
     @NoArgsConstructor
     public static class NoticeFileResponseDTO {
 
+        private int id;
+
         private String saveName;
 
     }

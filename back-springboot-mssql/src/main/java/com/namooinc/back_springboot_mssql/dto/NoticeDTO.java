@@ -48,7 +48,7 @@ public class NoticeDTO {
                     .content(notice.getContent())
                     .createdAt(notice.getCreatedAt())
                     .files(notice.getFiles().stream()
-                            .map(file -> new NoticeFileResponseDTO(file.getSaveName()))
+                            .map(file -> new NoticeFileResponseDTO(file.getId(), file.getSaveName()))
                             .collect(Collectors.toList()))
                     .build();
         }
