@@ -7,10 +7,7 @@ import java.util.stream.Collectors;
 import com.namooinc.back_springboot_mssql.dto.NoticeFileDTO.NoticeFileResponseDTO;
 import com.namooinc.back_springboot_mssql.model.Notice;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 public class NoticeDTO {
 
@@ -48,7 +45,8 @@ public class NoticeDTO {
                     .content(notice.getContent())
                     .createdAt(notice.getCreatedAt())
                     .files(notice.getFiles().stream()
-                            .map(file -> new NoticeFileResponseDTO(file.getId(), file.getSaveName()))
+                            .map(file -> new NoticeFileResponseDTO(file.getId(), file.getOriginalName(),
+                                    file.getSaveName()))
                             .collect(Collectors.toList()))
                     .build();
         }

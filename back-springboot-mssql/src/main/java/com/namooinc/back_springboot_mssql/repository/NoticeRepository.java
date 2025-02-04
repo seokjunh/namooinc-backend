@@ -12,4 +12,5 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer> {
     Page<Notice> findAll(Pageable pageable);
 
     Page<Notice> findByTitleContaining(Pageable pageable, String searchTerm);
+
 }
