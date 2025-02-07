@@ -88,12 +88,12 @@ public class NoticeFileService {
                     .key(savedFileName)
                     .build();
 
-            InputStream imageStream = s3Client.getObject(getObjectRequest);
+            InputStream inputStrem = s3Client.getObject(getObjectRequest);
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + savedFileName + "\"")
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .body(new InputStreamResource(imageStream));
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(new InputStreamResource(inputStrem));
 
         } catch (S3Exception e) {
 
