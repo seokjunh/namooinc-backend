@@ -82,7 +82,7 @@ public class NoticeService {
 
             Notice patchedNotice = noticeRepository.save(existingNotice);
 
-            for (NoticeFile file: savedFiles) {
+            for (NoticeFile file : savedFiles) {
                 noticeFileRepository.delete(file);
             }
 
@@ -93,6 +93,13 @@ public class NoticeService {
     }
 
     public void delete(int id) {
+        List<NoticeFile> savedFiles = noticeFileRepository.findByNotice_Id(id);
+
+        if (savedFiles != null) {
+            for (NoticeFile file : savedFiles) {
+                noticeFileService.deleteFileToS3(file);
+            }
+        }
         noticeRepository.deleteById(id);
     }
 }

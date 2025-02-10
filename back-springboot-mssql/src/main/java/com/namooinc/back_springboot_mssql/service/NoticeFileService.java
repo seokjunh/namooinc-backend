@@ -17,8 +17,11 @@ import com.namooinc.back_springboot_mssql.model.Notice;
 import com.namooinc.back_springboot_mssql.model.NoticeFile;
 import com.namooinc.back_springboot_mssql.repository.NoticeFileRepository;
 
+import software.amazon.awssdk.awscore.exception.AwsServiceException;
+import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
@@ -100,6 +103,19 @@ public class NoticeFileService {
             System.err.println("Error occurred while downloading from S3: " + e.awsErrorDetails().errorMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    public void deleteFileToS3(NoticeFile file) {
+        try {
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder().bucket(BUCKET_NAME)
+                    .key(file.getSaveName())
+                    .build();
+
+            s3Client.deleteObject(deleteObjectRequest);
+        } catch (AwsServiceException | SdkClientException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
